@@ -2,7 +2,6 @@ import sys
 import pickle
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, KFold
 
 # Return a flattened df of the specified feature (either 'max_min' or 'std')
 def flatten(df, feature='max_min', interval=60):
@@ -18,9 +17,9 @@ def flatten(df, feature='max_min', interval=60):
             max_minus_min = pd.Series(np.ptp(subset[subset.columns].values, axis=0))
             result_df = result_df.append(max_minus_min, ignore_index=True)
 
-        if feature == 'std':
-            std = pd.Series(np.var(subset[subset.columns].values, axis=0))
-            result_df = result_df.append(std, ignore_index=True)
+        if feature == 'var':
+            var = pd.Series(np.var(subset[subset.columns].values, axis=0))
+            result_df = result_df.append(var, ignore_index=True)
 
     return result_df
 
@@ -33,46 +32,45 @@ def concat_df(df1, df2):
 
     return df
 
-PATH_TO_MODEL = sys.path[0] + '/models'
-
-class ML:
-    DANCES = [  "unknown",  # Unknown ==> 0
-                "wipers",   # Wipers ==> 1
-                "number7",  # Number7 ==> 2
-                "chicken",  # Chicken ==> 3
-                "sidestep", # SideStep ==> 4
-                "turnclap", # TurnClap ==> 5
-                "numbersix",  # Number6 ==> 6
-                "salute",   # Salute ==> 7
-                "mermaid",  # Mermaid ==> 8
-                "swing",    # Swing ==> 9
-                "cowboy",
-		"logout" ]  # Cowboy ==> 10
+class MLModel:
+    DANCES = [
+                'wipers',   # Wipers ==> 0
+                'number7',  # Number7 ==> 1
+                'chicken',  # Chicken ==> 2
+                'sidestep', # SideStep ==> 3
+                'turnclap', # TurnClap ==> 4
+                'numbersix',# Number6 ==> 5
+                'salute',   # Salute ==> 6
+                'mermaid',  # Mermaid ==> 7
+                'swing',    # Swing ==> 8
+                'cowboy',   # Cowboy ==> 9
+                'logout',   # FinalMove ==> 10
+    ]
 
     def __init__(self):
-        self.RF = pickle.load(open(PATH_TO_MODEL + '/random_forest_model.sav', 'rb'))
-        #self.SVM = pickle.load(open(PATH_TO_MODEL + '/svc_model.sav', 'rb'))
-        self.counter = 0
+        PATH_TO_MODEL = sys.path[0] + '/models'
+        self.RF = pickle.load(open(PATH_TO_MODEL + '/random_forest.sav', 'rb'))
+        # self.SVM = pickle.load(open(PATH_TO_MODEL + '/svc.sav', 'rb'))
+    
 
-
+    # This method is called when dance moves are required to be
+    # predicted in real time. Return one dance label in the form
+    # of the actual dance move.
     def predict(self, df):
-        #df_max_min = flatten(df,'max_min',interval=len(df))
-        df_std = flatten(df, 'std', interval=len(df))
+        #df_max_min = flatten(df, interval=len(df))
+        df_std = flatten(df, 'var', interval=len(df))
         #df_concat = concat_df(df_max_min, df_std)
 
         predicted_RF = self.RF.predict(df_std)
-        #predicted_SVM = self.SVM.predict(df_std)
+        # predicted_SVM = self.SVM.predict(df_concat)
 
-        #if predicted_RF[0] != predicted_SVM[0]:
-         #   print("SVM: " + self.DANCES[predicted_SVM[0]])
-          #  print("RF: " + self.DANCES[predicted_RF[0]])
-        #    return self.DANCES[0]
-        
-        #if predicted_RF[0] == 3 and predicted_SVM[0] == 8:
-         #   return self.DANCES[8]
-        
+        # if predicted_RF != predicted_SVM:
+            # return None
+
         return self.DANCES[predicted_RF[0]]
 
-
-    def increment_counter(self):
-        self.counter += 1
+    
+    # This method is used only in test.py where real-time prediction
+    # is not required.
+    def test_predict(self, df):
+        return self.RF.predict(df)

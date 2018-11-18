@@ -154,7 +154,7 @@ class StoreData():
                     # print('Going to sleep bye bye ...')
                     time.sleep(2)
                     print('Woke up.')
-                    self.model.increment_counter()
+                
                 self.counter = 0
 
             #self.send_server(action, self.voltage,self.current,self.power,self.cumpower) #send all the shit to 
