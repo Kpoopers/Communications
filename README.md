@@ -1,5 +1,5 @@
 # Communications and Interfacing Hardware
-Ensuring reliable communications between Arduino, Raspberry Pi and the Final Server
+📡  Ensuring Reliable Communications between Arduino, Raspberry Pi and the Final Server and Interfacing between Arduino and Sensors
 
 ## Arduino
 * All files in this folder should be included together in one folder.
