@@ -50,5 +50,6 @@ def sendToServer(action, shouldClose):
     print(finalString)
     sock.send(finalString)
     #counter = counter+1
+    #closes when logout is displayed and move has been detected by ml
     if (shouldClose):
         sock.close()
