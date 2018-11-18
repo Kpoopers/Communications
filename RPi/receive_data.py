@@ -9,7 +9,7 @@ import operator
 import numpy as np
 import pandas as pd
 import functools as ft
-import csv #to write to csv file, can use pandas but see how
+import csv
 from ml import ML
 import client
 
