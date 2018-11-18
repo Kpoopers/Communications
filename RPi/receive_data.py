@@ -1,6 +1,3 @@
-#Receiving data from MEGA without using a ring buffer.
-# Receives data and insert into a list. Which automatically #prints out necessary data values into the csv file
-#(or other method that softwareSquad prefers)
 import serial
 import time
 import struct
