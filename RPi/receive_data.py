@@ -119,10 +119,10 @@ class StoreData():
             
             self.counter += 1
             
-            #check if client program to end
+            #check if client program should be closed
             shouldClose  = False
             
-            #collect adequate data for machine learning model
+            #collect required amount of data for machine learning model
             if(self.counter == 60):
                 #function call
                 action = self.model.predict(self.df)
@@ -146,7 +146,6 @@ class StoreData():
                 
                 self.counter = 0
 
-            #self.send_server(action, self.voltage,self.current,self.power,self.cumpower) #send all the shit to 
             #for training of ml model and data collection purposes
                 # with open('data.csv', 'a+') as f:
                 # sel.df = pd.DataFrame(list, index[0])[self.columns].set_index('ax1')
@@ -168,7 +167,6 @@ class StoreData():
 class Raspberry():
         def __init__(self):
             self.list = [] #creating a list to store a packet of sensor data received by the arduino
-            #dont need to use a ring buffer, as arduino side already  has one!
 
         def main(self):
             #set up port connection
