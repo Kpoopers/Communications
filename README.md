@@ -1,4 +1,4 @@
-# Communications
+# Communications and Interfacing Hardware
 Ensuring reliable communications between Arduino, Raspberry Pi and the Final Server
 
 ## Arduino
