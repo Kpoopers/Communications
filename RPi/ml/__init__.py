@@ -58,10 +58,10 @@ class MLModel:
     # of the actual dance move.
     def predict(self, df):
         #df_max_min = flatten(df, interval=len(df))
-        df_std = flatten(df, 'var', interval=len(df))
-        #df_concat = concat_df(df_max_min, df_std)
+        df_var = flatten(df, 'var', interval=len(df))
+        #df_concat = concat_df(df_max_min, df_var)
 
-        predicted_RF = self.RF.predict(df_std)
+        predicted_RF = self.RF.predict(df_var)
         # predicted_SVM = self.SVM.predict(df_concat)
 
         # if predicted_RF != predicted_SVM:
