@@ -12,10 +12,6 @@ import functools as ft
 import csv #to write to csv file, can use pandas but see how
 from ml import ML
 import client
-#pandas is for writing to csv file
-
-#import threading (i will need this to manage tasks, need to read up on how to use threading and all)
-#might not need for the time being.
 
 class ReceiveData():
         def __init__(self, list, port):
@@ -66,12 +62,8 @@ class ReceiveData():
                 self.current = float(self.port.readline())
                 self.power = float(self.port.readline())
                 self.cumpower = float(self.port.readline())
-                #print(self.voltage)
-                #print(self.current)
-                #print(self.power)
-                #print(self.cumpower)
 
-                size = self.port.readline() #ideally this should receive
+                size = self.port.readline()
                 size = size.decode('utf-8')
                 #size = int(size)
                 #size = 14
@@ -84,10 +76,8 @@ class ReceiveData():
                     data = data.decode('utf-8')
                     data = int(data)
                     self.list.append(data)
-                    ##print(data)
                 checksum = self.port.readline()
                 checksum = int(checksum)
-                ##print(checksum)
 
                 #check checksum
                 value = 0
@@ -123,17 +113,19 @@ class StoreData():
             self.storeData()
 
         def storeData(self):
-            #sending data as a np 2Darray for machine learning
             #df = pd.DataFrame(self.list, columns = self.columns, header = None)
 
             self.df.loc[self.counter] = self.row_list
             #self.df.append(pd.DataFrame([self.row_list], columns=self.columns), ignore_index=False)
             #print("list appended!")
             #print(self.df)
+            
             self.counter += 1
+            
             #check if client program to end
             shouldClose  = False
-            #to essentially run as an infinite loop
+            
+            #collect adequate data for machine learning model
             if(self.counter == 60):
                 #function call
                 action = self.model.predict(self.df)
@@ -179,16 +171,13 @@ class StoreData():
 class Raspberry():
         def __init__(self):
             self.list = [] #creating a list to store a packet of sensor data received by the arduino
-#dont need to use a ring buffer, as arduino side already  has one!
+            #dont need to use a ring buffer, as arduino side already  has one!
 
         def main(self):
             #set up port connection
             self.port=serial.Serial('/dev/ttyS0',115200)
             receive = ReceiveData(self.list, self.port)
             receive.run()
-            #not /dev/ttyAMA0
-            #initialize all threads
-            #commThread = ReceiveData(self.list,)
 
 if __name__ == '__main__':
         pi = Raspberry()
